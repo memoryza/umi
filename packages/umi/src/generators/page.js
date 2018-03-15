@@ -23,7 +23,6 @@ function stripEmptyLine(content) {
 }
 
 export default function(opts = {}) {
-  const { file } = opts;
   assert(
     !('isDirectory' in opts) || typeof opts.isDirectory === 'boolean',
     'opts.isDirectory should be boolean',
@@ -32,8 +31,7 @@ export default function(opts = {}) {
     !('useClass' in opts) || typeof opts.useClass === 'boolean',
     'opts.useClass should be boolean',
   );
-  const isDirectory = opts.isDirectory || false;
-  const cwd = opts.cwd || process.cwd();
+  const { file = 'page', isDirectory = false, cwd = process.cwd() } = opts;
 
   console.log(`[DEBUG] generate page ${file} with isDirectory ${isDirectory}`);
 
@@ -45,12 +43,9 @@ export default function(opts = {}) {
       !directoryExists(join(cwd, 'src', 'page', file)),
       `directory src/page/${file} exists`,
     );
-    jsTargetPath = join(cwd, 'src', 'page', file, 'page.js');
-    cssTargetPath = join(cwd, 'src', 'page', file, 'page.css');
-  } else {
-    jsTargetPath = join(cwd, 'src', 'page', `${file}.js`);
-    cssTargetPath = join(cwd, 'src', 'page', `${file}.css`);
   }
+  jsTargetPath = join(cwd, 'src', 'page', `${file}.js`);
+  cssTargetPath = join(cwd, 'src', 'page', `${file}.css`);
 
   assert(!fileExists(jsTargetPath), `file src/page/${file} exists`);
   assert(!fileExists(cssTargetPath), `file src/page/${file} exists`);
